@@ -1,3 +1,4 @@
+import sys
 from functools import partial
 
 import numpy
@@ -21,6 +22,7 @@ class FetchImages(DocumentRouter):
 
     def start(self, doc):
         self.run_uid = doc["uid"]
+        print(f"Processing Run {self.run_uid}.", file=sys.stderr)
 
     def descriptor(self, doc):
         self.stream_name = doc["name"]
@@ -81,8 +83,10 @@ def main():
     #
     # fetch the documents from tiled and feed them into the run_router.
     doc_gen = tiled_client[uid].documents()
+    print("Streaming documents...", file=sys.stderr)
     for name, doc in doc_gen:
         run_router(name, doc)
+    print("Stream complete.", file=sys.stderr)
 
 
 if __name__ == "__main__":
