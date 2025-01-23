@@ -9,15 +9,9 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-numpy = ">=2,<3"
-scipy = ">=1.15.1,<2"
-python-blosc2 = ">=3.0.0,<4"
-python = "3.12.*"
-awkward = ">=2.7.2,<3"
-numba = ">=0.60.0,<0.61"
-event-model = ">=1.22.3,<2"
+tiled-client = ">=0.1.0b14, <0.2"
 ipython = ">=8.31.0,<9"
+event-model = ">=1.22.3,<2"
 
 [pypi-dependencies]
-tiled = { version = ">=0.1.0b14, <0.2", extras = ["client"] }
 bluesky-tiled-plugins = ">=2.0.0b55, <3"
