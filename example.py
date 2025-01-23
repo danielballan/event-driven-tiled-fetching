@@ -41,8 +41,6 @@ def build_stream_consumer(name, doc, *, start_doc, stream_name, field_name):
     callbacks = []
     if doc["name"] == stream_name:
         callback = FetchImages(tiled_client=tiled_client, field_name=field_name)
-        callback("start", start_doc)
-        # RunRouter will feed callback the descriptor and subsequent documents.
         callbacks.append(callback)
     return callbacks
 
