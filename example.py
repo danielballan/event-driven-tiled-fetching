@@ -1,4 +1,5 @@
 import sys
+import time
 from functools import partial
 
 import numpy
@@ -7,6 +8,7 @@ from tiled.client import from_uri
 
 
 URI = "https://tiled.nsls2.bnl.gov/api/v1/metadata/smi/raw"
+BACKOFF = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8]  # delay in seconds
 tiled_client = from_uri(URI)
 
 def do_science(index, image):
@@ -28,11 +30,21 @@ class FetchImages(DocumentRouter):
         self.stream_name = doc["name"]
 
     def event(self, doc):
-        index = doc["seq_num"] - 1  # because I lost an argument with a scientist in 2015
-        # TODO Backoff loop
         run = tiled_client[self.run_uid]
         array_client = run[self.stream_name, "data", self.field_name]
-        image = array_client[index]
+        index = doc["seq_num"] - 1  # because I lost an argument with a scientist in 2015
+        for delay in BACKOFF:
+            try:
+                image = array_client[index]
+            except IndexError:
+                # Try again after a delay.
+                time.sleep(delay)
+            else:
+                # Success! Escape retry loop.
+                break
+        else:
+            # Out of retries
+            raise TimeoutError("Index {index} could not be retrieved")
         do_science(index, image)
 
 
