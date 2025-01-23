@@ -30,6 +30,8 @@ class FetchImages(DocumentRouter):
         self.stream_name = doc["name"]
 
     def event(self, doc):
+        # If an EventPage is received, the base class DocumentRouter unpacks it
+        # into separate Event documents and passes each to this method.
         run = tiled_client[self.run_uid]
         array_client = run[self.stream_name, "data", self.field_name]
         index = doc["seq_num"] - 1  # because I lost an argument with a scientist in 2015
