@@ -77,9 +77,12 @@ def build_run_consumer(name, doc, *, stream_name, field_name):
 
 def main():
     "Demo"
+    # Constants point to an example dataset.
     uid = "c21d472b-4241-4f48-8d62-a0b56e1d471d"  # from Dylan
     stream_name = "primary"
     field_name = "pil900KW_image"
+
+    # Construct callbacks that will consume document stream.
     factory = partial(
         build_run_consumer,
         stream_name=stream_name,
